@@ -1,12 +1,21 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 
+import { RouterTestingModule } from '@angular/router/testing';
+import { By } from '@angular/platform-browser';
+import { RouterLinkWithHref, RouterOutlet } from '@angular/router';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent
       ],
+      imports: [
+        RouterTestingModule.withRoutes([])
+      ], schemas: [NO_ERRORS_SCHEMA]
+      // el no erros sche,a es apra ignorar lo que no conoce
     }).compileComponents();
   }));
 
@@ -16,16 +25,27 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'pruebas'`, () => {
+  it('Debe de tener un router-Outlet', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('pruebas');
+    const debugelement = fixture.debugElement.query(By.directive(RouterOutlet));
+
+    expect(debugelement).not.toBeNull();
   });
 
-  it('should render title', () => {
+
+  xit('Debe de tener un link a la pagina de medicos', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('pruebas app is running!');
+    const debugelement = fixture.debugElement.queryAll(By.directive(RouterLinkWithHref));
+    let existe = false;
+
+    for (const element of debugelement) {
+      if (element.attributes['routerLink'] === '/medicos') {
+        existe = true;
+        break;
+      }
+    }
+
+    expect(existe).toBeTruthy();
+
   });
 });
